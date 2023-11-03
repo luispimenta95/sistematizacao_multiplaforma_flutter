@@ -21,10 +21,9 @@ class CustomSearchDelegate extends SearchDelegate<String> {
   Future<String> callAsyncFetch(String query) async {
     String? moeda = coinsOptions[query];
     String url = 'http://economia.awesomeapi.com.br/json/last/$moeda-$pais';
-    print(url);
+
 
     final response = await http.get(Uri.parse(url));
-    print(response.statusCode);
     if (response.statusCode == 200) {
       var jsonResponse =
           convert.jsonDecode(response.body) as Map<String, dynamic>;
