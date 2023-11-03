@@ -1,49 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
-import 'package:intl/intl.dart';
+import 'package:sistematizacao_dmm/controller/api.dart';
+
 
 class CustomSearchDelegate extends SearchDelegate<String> {
   final List<String> items;
-  String maiorCotacao = '';
-  String menorCotacao = '';
-  String name = '';
-  bool isLoading = true;
-  final coinsOptions = {
-    "Dirham dos Emirados": "AED",
-    "Bitcoin": "BTC",
-    "teste erro": "err"
-  };
-  static const String pais = 'BRL';
+  final ApiMonetizacao api = new ApiMonetizacao();
+
 
   CustomSearchDelegate(this.items);
-
-  Future<String> callAsyncFetch(String query) async {
-    String? moeda = coinsOptions[query];
-    String url = 'http://economia.awesomeapi.com.br/json/last/$moeda-$pais';
-
-
-    final response = await http.get(Uri.parse(url));
-    if (response.statusCode == 200) {
-      var jsonResponse =
-          convert.jsonDecode(response.body) as Map<String, dynamic>;
-      name = jsonResponse['$moeda$pais']['name'];
-      maiorCotacao = formatarMoeda(jsonResponse['$moeda$pais']['high']);
-      menorCotacao = formatarMoeda(jsonResponse['$moeda$pais']['low']);
-      return 'Ok';
-    } else {
-      return 'Erro';
-    }
-  }
-
-  String formatarMoeda(valor) {
-    double value = double.parse(valor);
-    final formatter = new NumberFormat("#,##0.00", "pt_BR");
-    String newText = "R\$ " + formatter.format(value);
-
-    return newText;
-  }
-
   @override
   List<Widget> buildActions(BuildContext context) {
     return [];
@@ -62,7 +26,7 @@ class CustomSearchDelegate extends SearchDelegate<String> {
   @override
   Widget buildResults(context) {
     return FutureBuilder<String>(
-        future: callAsyncFetch(query),
+        future: api.pesquisarApi(query),
         builder: (context, AsyncSnapshot<String> snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data!.toLowerCase() == 'ok') {
@@ -70,15 +34,15 @@ class CustomSearchDelegate extends SearchDelegate<String> {
                 children: <Widget>[
                   ListTile(
                     leading: Icon(Icons.currency_exchange),
-                    title: Text(name),
+                    title: Text(api.name),
                   ),
                   ListTile(
                     leading: Icon(Icons.arrow_circle_up),
-                    title: Text('$maiorCotacao'),
+                    title: Text(api.maiorCotacao),
                   ),
                   ListTile(
                     leading: Icon(Icons.arrow_circle_down),
-                    title: Text('$menorCotacao'),
+                    title: Text(api.menorCotacao),
                   ),
                 ],
               );
