@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 Future<List<Moeda>> recuperarDados(http.Client client) async {
   String url = 'https://economia.awesomeapi.com.br/json/daily/USD-BRL/15';
@@ -23,14 +25,14 @@ List<Moeda> tratarResposta(String responseBody) {
 
 class Moeda {
 
-  final String nome;
+   final String dataCotacao;
   final String maiorCotacao;
   final String menorCotacao;
 
 
   const Moeda({
 
-    required this.nome,
+    required this.dataCotacao,
     required this.maiorCotacao,
     required this.menorCotacao
   });
@@ -42,7 +44,7 @@ class Moeda {
 
 
 
-      nome: json['timestamp'] as String,
+      dataCotacao: json['timestamp'] as String,
       maiorCotacao: json['high'] as String,
       menorCotacao: json['low'] as String
     );
@@ -120,28 +122,50 @@ class PhotosList extends StatelessWidget {
             Table(
 
               children: <TableRow>[
-                _criarLinhaTable("Dia, Alta, Baixa"),
+               // _criarLinhaTable("Dia, Alta, Baixa"),
 
                 for(var item in photos)
-                _criarLinhaTable(""+item.nome +", "+item.menorCotacao +"," +item.menorCotacao),
+                _criarLinhas(item),
               ],
             )
           ],
         ),
       );
   }
-  _criarLinhaTable(String listaNomes) {
+  _criarLinhas(Moeda dados) {
+    String dataAjustada = formatarData(dados.dataCotacao);
+    String high = formatarMoeda(dados.maiorCotacao);
+    String low = formatarMoeda(dados.menorCotacao);
+
+
+    /*String timestamp = listaNomes.split(',')[0];
+
+    listaNomes.split(',')[0] = outputDate;
+    print(outputDate); // 12/31/2000 11:59 PM <-- MM/dd 12H format
+*/
     return TableRow(
-      children: listaNomes.split(',').map((name) {
-        return Container(
-          alignment: Alignment.center,
-          child: Text(
-            name,
-            style: TextStyle(fontSize: 20.0),
-          ),
-          padding: EdgeInsets.all(8.0),
-        );
-      }).toList(),
+
+          children: [
+            Text(dataAjustada),
+            Text(high),
+            Text(low),
+          ]
     );
+  }
+
+  String formatarData(String dataCotacao) {
+    int intVal = int.parse(dataCotacao);
+    final DateTime date1 = DateTime.fromMillisecondsSinceEpoch(intVal * 1000);
+    var outputFormat = DateFormat('dd/MM/yyyy');
+    var outputDate = outputFormat.format(date1);
+    return outputDate;
+  }
+
+  String formatarMoeda(valor) {
+    double value = double.parse(valor);
+    final formatter = new NumberFormat("#,##0.00", "pt_BR");
+    String newText = "R\$ " + formatter.format(value);
+
+    return newText;
   }
 }
