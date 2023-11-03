@@ -138,11 +138,7 @@ class PhotosList extends StatelessWidget {
     String low = formatarMoeda(dados.menorCotacao);
 
 
-    /*String timestamp = listaNomes.split(',')[0];
 
-    listaNomes.split(',')[0] = outputDate;
-    print(outputDate); // 12/31/2000 11:59 PM <-- MM/dd 12H format
-*/
     return TableRow(
 
         children: [
