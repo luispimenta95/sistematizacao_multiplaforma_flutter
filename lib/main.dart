@@ -36,7 +36,11 @@ class Moeda {
   });
 
   factory Moeda.fromJson(Map<String, dynamic> json) {
+
+
     return Moeda(
+
+
 
       nome: json['timestamp'] as String,
       maiorCotacao: json['high'] as String,
@@ -115,12 +119,11 @@ class PhotosList extends StatelessWidget {
           children: <Widget>[
             Table(
 
-              children: [
+              children: <TableRow>[
                 _criarLinhaTable("Dia, Alta, Baixa"),
 
                 for(var item in photos)
-
-                _criarLinhaTable(""+item.nome. +", "+item.menorCotacao +"," +item.menorCotacao),
+                _criarLinhaTable(""+item.nome +", "+item.menorCotacao +"," +item.menorCotacao),
               ],
             )
           ],
