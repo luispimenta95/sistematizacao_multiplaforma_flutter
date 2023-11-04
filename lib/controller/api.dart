@@ -2,6 +2,7 @@
 
 import 'package:sistematizacao_dmm/controller/utils.dart';
 
+import 'dart:convert' as convert;
 
 class ApiMonetizacao{
 
@@ -20,22 +21,26 @@ class ApiMonetizacao{
   static const String pais = 'BRL';
 
 
-
-  Future<String> pesquisarApi(String query) async {
+String response ='';
+  Future<String> pesquisarCotacao(String query,int tipo) async {
+    String url = '';
     String? moeda = coinsOptions[query];
-    String url = 'http://economia.awesomeapi.com.br/json/last/$moeda-$pais';
-
-
-    final response = await util.makeRequest(url);
-    if (response['status'] != 404) {
-
-      name = response['$moeda$pais']['name'];
-      maiorCotacao = util.formatarMoeda(response['$moeda$pais']['high']);
-      menorCotacao = util.formatarMoeda(response['$moeda$pais']['low']);
-      return 'Ok';
+    if (tipo == 1) {
+      url = 'http://economia.awesomeapi.com.br/json/last/$moeda-$pais';
     } else {
-      return 'Erro';
+      url = 'https://economia.awesomeapi.com.br/json/daily/$moeda-$pais/15';
     }
+
+     response = await util.makeRequest(url);
+    if(tipo ==1) {
+      var jsonResponse = convert.jsonDecode(response) as Map<String, dynamic>;
+      if (jsonResponse['status'] != 404) {
+        name = jsonResponse['$moeda$pais']['name'];
+        maiorCotacao = util.formatarMoeda(jsonResponse['$moeda$pais']['high']);
+        menorCotacao = util.formatarMoeda(jsonResponse['$moeda$pais']['low']);
+      }
+    }
+      return response;
   }
 
   List<String> sugestoesPesquisa(){

@@ -4,7 +4,6 @@ import 'dart:convert' as convert;
 
 class Util{
 
-  dynamic v = 'Erro';   // v is of type int.
 
   String formatarMoeda(valor) {
     double value = double.parse(valor);
@@ -13,20 +12,13 @@ class Util{
 
     return newText;
   }
-  Future<Map<String,dynamic>> makeRequest(String url) async {
+  Future<String> makeRequest(String url) async {
 
     final response = await http.get(Uri.parse(url));
 
-      return  convert.jsonDecode(response.body) as Map<String, dynamic>;
+      return  response.body;
   }
 
-
-  Future<String> makeRequestTwo(String url) async {
-
-    final response = await http.get(Uri.parse(url));
-
-    return  response.body;
-  }
   String formatarData(String dataCotacao) {
     int intVal = int.parse(dataCotacao);
     final DateTime date1 = DateTime.fromMillisecondsSinceEpoch(intVal * 1000);

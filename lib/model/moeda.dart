@@ -26,4 +26,8 @@ class Moeda {
 
     );
   }
+  String tratarJson() {
+    return '{ ${this.nome}, ${this.dataCotacao}, ${this.menorCotacao}, ${this.maiorCotacao} }';
+  }
+
 }

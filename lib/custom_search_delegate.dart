@@ -25,10 +25,10 @@ class CustomSearchDelegate extends SearchDelegate<String> {
   @override
   Widget buildResults(context) {
     return FutureBuilder<String>(
-        future: api.pesquisarApi(query),
+        future: api.pesquisarCotacao(query,1),
         builder: (context, AsyncSnapshot<String> snapshot) {
           if (snapshot.hasData) {
-            if (snapshot.data!.toLowerCase() == 'ok') {
+            if (!snapshot.data!.contains('status')) {
               return ListView(
                 children: <Widget>[
                   ListTile(
