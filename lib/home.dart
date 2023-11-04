@@ -1,58 +1,71 @@
 import 'package:flutter/material.dart';
+import 'package:sistematizacao_dmm/lista.dart';
+import 'package:sistematizacao_dmm/pesquisa.dart';
 
-import 'custom_search_delegate.dart';
+class AppHome extends StatelessWidget {
+  const AppHome({super.key});
 
-class MyHomePage extends StatefulWidget {
+  static const String _title = 'Flutter Code Sample';
+
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      title: _title,
+      home: MyStatefulWidget(),
+    );
+  }
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  String _data = 'Loading...';
-  String name = '';
-  String maiorCotacao ='';
-  String menorCotacao = '';
-  bool isLoading = true;
-  final List<String> moedas = [
-    'Dirham dos Emirados',
-    'Bitcoin',
-    'teste erro'
+class MyStatefulWidget extends StatefulWidget {
+  const MyStatefulWidget({super.key});
+
+  @override
+  State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
+}
+
+class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+  int _selectedIndex = 0;
+  List<Widget> tabs = [
+    PesquisaMoedas(),
+    Lista()
+
+
 
   ];
-
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Search Demo'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              showSearch(
-                context: context,
-                delegate: CustomSearchDelegate(moedas),
-              );
-            },
+          title: const Text('HomePage'),
+          centerTitle: true
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today),
+            label: 'Pesquisa diária',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            label: 'Pesquisa quinzenal',
           ),
         ],
-      ),
-      body: ListView.builder(
-        itemCount: moedas.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(moedas[index]),
-            onTap: (){
-              showSearch(
-                  context: context,
-                  delegate: CustomSearchDelegate(moedas)
-              );
+        currentIndex: _selectedIndex,
+        onTap: (int index) {
+          setState(
+                () {
+              _selectedIndex = index;
             },
           );
         },
       ),
+      body: Center(
+        child: tabs.elementAt(_selectedIndex),
+      ),
     );
   }
+
+
 }

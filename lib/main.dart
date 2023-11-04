@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'myapp.dart';
+import 'package:sistematizacao_dmm/home.dart';
 
-void main() {
-  runApp(MyApp());
+void main()  {
+
+  runApp(const AppHome());
 }
