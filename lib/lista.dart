@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
+import 'controller/utils.dart';
+final Util util = new Util();
 Future<List<Moeda>> recuperarDados(http.Client client) async {
   String url = 'https://economia.awesomeapi.com.br/json/daily/USD-BRL/15';
   final response = await client
@@ -122,6 +124,14 @@ class PhotosList extends StatelessWidget {
             Table(
 
               children: <TableRow>[
+            TableRow(
+
+            children: [
+            Text('Data'),
+            Text('Maior cotação'),
+            Text('Menor cotação'),
+          ]
+        ),
                 // _criarLinhaTable("Dia, Alta, Baixa"),
 
                 for(var item in photos)
@@ -133,9 +143,9 @@ class PhotosList extends StatelessWidget {
       );
   }
   _criarLinhas(Moeda dados) {
-    String dataAjustada = formatarData(dados.dataCotacao);
-    String high = formatarMoeda(dados.maiorCotacao);
-    String low = formatarMoeda(dados.menorCotacao);
+    String dataAjustada = util.formatarData(dados.dataCotacao);
+    String high = util.formatarMoeda(dados.maiorCotacao);
+    String low = util.formatarMoeda(dados.menorCotacao);
 
 
 
@@ -149,19 +159,5 @@ class PhotosList extends StatelessWidget {
     );
   }
 
-  String formatarData(String dataCotacao) {
-    int intVal = int.parse(dataCotacao);
-    final DateTime date1 = DateTime.fromMillisecondsSinceEpoch(intVal * 1000);
-    var outputFormat = DateFormat('dd/MM/yyyy');
-    var outputDate = outputFormat.format(date1);
-    return outputDate;
-  }
 
-  String formatarMoeda(valor) {
-    double value = double.parse(valor);
-    final formatter = new NumberFormat("#,##0.00", "pt_BR");
-    String newText = "R\$ " + formatter.format(value);
-
-    return newText;
-  }
 }

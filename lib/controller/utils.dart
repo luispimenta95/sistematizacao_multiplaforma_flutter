@@ -20,6 +20,13 @@ class Util{
       return  convert.jsonDecode(response.body) as Map<String, dynamic>;
   }
 
+
+  Future<String> makeRequestTwo(String url) async {
+
+    final response = await http.get(Uri.parse(url));
+
+    return  response.body;
+  }
   String formatarData(String dataCotacao) {
     int intVal = int.parse(dataCotacao);
     final DateTime date1 = DateTime.fromMillisecondsSinceEpoch(intVal * 1000);
@@ -27,4 +34,6 @@ class Util{
     var outputDate = outputFormat.format(date1);
     return outputDate;
   }
+
+
 }

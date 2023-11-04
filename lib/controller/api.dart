@@ -13,6 +13,8 @@ class ApiMonetizacao{
   final coinsOptions = {
     "Dirham dos Emirados": "AED",
     "Bitcoin": "BTC",
+    "Dólar Americano": "USD",
+    "Dólar Canadense": "CAD",
     "teste erro": "err"
   };
   static const String pais = 'BRL';
@@ -25,7 +27,7 @@ class ApiMonetizacao{
 
 
     final response = await util.makeRequest(url);
-    if (response['status'] !=404) {
+    if (response['status'] != 404) {
 
       name = response['$moeda$pais']['name'];
       maiorCotacao = util.formatarMoeda(response['$moeda$pais']['high']);
@@ -39,8 +41,10 @@ class ApiMonetizacao{
   List<String> sugestoesPesquisa(){
     return
     [
-      'Dirham dos Emirados',
       'Bitcoin',
+      'Dirham dos Emirados',
+     'Dólar Americano',
+      'Dólar Canadense',
       'teste erro'
 
     ];

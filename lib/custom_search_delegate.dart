@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:sistematizacao_dmm/controller/api.dart';
 
-
 class CustomSearchDelegate extends SearchDelegate<String> {
   final List<String> items;
   final ApiMonetizacao api = new ApiMonetizacao();
 
-
   CustomSearchDelegate(this.items);
+
   @override
   List<Widget> buildActions(BuildContext context) {
     return [];
@@ -34,28 +33,39 @@ class CustomSearchDelegate extends SearchDelegate<String> {
                 children: <Widget>[
                   ListTile(
                     leading: Icon(Icons.currency_exchange),
-                    title: Text(api.name),
+                    title: Text(
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                        api.name),
                   ),
                   ListTile(
-                    leading: Icon(Icons.arrow_circle_up),
-                    title: Text(api.maiorCotacao),
+                    leading: Icon(color: Colors.green, Icons.arrow_circle_up),
+                    title: Text(
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                        api.maiorCotacao),
                   ),
                   ListTile(
-                    leading: Icon(Icons.arrow_circle_down),
-                    title: Text(api.menorCotacao),
+                    leading: Icon(color: Colors.red, Icons.arrow_circle_down),
+                    title: Text(api.menorCotacao,
+                        style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
                 ],
               );
             } else {
-              return ListView(
-                children: <Widget>[
-
-                 Center(
-                   child: Text(
-                     'Nenhum moeda com o nome $query foi encontrada!'
-                   ),
-                 )
-                ],
+              return Scaffold(
+                body: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      const Text(
+                        'Nenhum resultado foi encontrado para a moeda:',
+                      ),
+                      Text(
+                        '$query',
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
+                    ],
+                  ),
+                ),
               );
             }
           } else {
